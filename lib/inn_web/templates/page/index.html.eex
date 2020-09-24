@@ -1,0 +1,15 @@
+<div>
+:)
+</div>
+
+<section class="row">
+    <label for="chat-input" id="chat-label">Лабел</label>
+</section>
+<section class="row">
+    <input id="chat-input" type="text"></input>
+</section>
+<section class="row">
+    <div id="messages" role="log" aria-live="polite">
+    
+    </div>
+</section>
