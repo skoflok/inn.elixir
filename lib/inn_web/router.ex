@@ -17,6 +17,9 @@ defmodule InnWeb.Router do
     pipe_through(:browser)
 
     get("/", PageController, :index)
+
+    resources("/sessions", SessionController, only: [:new, :create])
+    delete("/sessions", SessionController, :delete)
   end
 
   # Other scopes may use custom stacks.
@@ -25,8 +28,8 @@ defmodule InnWeb.Router do
 
     scope "/v1" do
       scope "/tins" do
-        get "/" , TinController, :index
-        get "/:id" , TinController, :show
+        get("/", TinController, :index)
+        get("/:id", TinController, :show)
       end
     end
   end
