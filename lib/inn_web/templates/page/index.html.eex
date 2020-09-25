@@ -10,6 +10,12 @@
 </section>
 <section class="row">
     <div id="messages" role="log" aria-live="polite">
-    
+    </div>
+</section>
+<section class="row">
+    <div id="table" role="archive" aria-live="polite">
+        <%= for tin <- @tins do %>
+        <p>[<%= tin.inserted_at %>] <%= tin.number %> -- <%= tin.is_valid %><p>
+        <% end %>
     </div>
 </section>

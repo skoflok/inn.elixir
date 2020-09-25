@@ -54,6 +54,16 @@ let socket = new Socket("/socket", {params: {token: window.userToken}})
 // Finally, connect to the socket:
 socket.connect()
 
+function dateString(d){
+  function pad(n){return n<10 ? '0'+n : n}
+  return d.getFullYear()+'-'
+  + pad(d.getMonth()+1)+'-'
+  + pad(d.getDate())+' '
+  + pad(d.getHours())+':'
+  + pad(d.getMinutes())+':'
+  + pad(d.getSeconds())
+}
+
 // Now that you are connected, you can join channels with a topic:
 let channel = socket.channel("public:checker", {});
 let chatInput         = document.querySelector("#chat-input");
@@ -69,9 +79,13 @@ chatInput.addEventListener("keypress", event => {
 });
 
 channel.on("validation", payload => {
-  let messageItem = document.createElement("p")
-  messageItem.innerText = `[${Date()}] ${payload.body}`
-  messagesContainer.insertBefore(messageItem, messagesContainer.childNodes[0] || null)
+  if(payload.status==true) {
+    let messageItem = document.createElement("p");
+    let date = new Date(payload.data.inserted_at);
+    let formattedDate = dateString(date);
+    messageItem.innerText = `[${formattedDate}] ${payload.data.number} -- ${payload.data.is_valid}`;
+    messagesContainer.insertBefore(messageItem, messagesContainer.childNodes[0] || null);
+  }
 });
 
 channel.on("phx_reply", payload => {

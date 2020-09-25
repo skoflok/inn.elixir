@@ -4,11 +4,21 @@ defmodule InnWeb.TinController do
   alias Inn.Checker
   alias Inn.Checker.Tin
 
-  action_fallback InnWeb.FallbackController
+  action_fallback(InnWeb.FallbackController)
 
-  def index(conn, _params) do
-    tins = Checker.list_tins()
-    render(conn, "index.json", tins: tins)
+  def index(conn, params) do
+    page = Map.get(params, "page", "1") |> String.to_integer()
+
+    p =
+      cond do
+        page <= 0 -> 1
+        true -> page
+      end
+
+    tins = Checker.list_paging(p)
+    meta = Checker.meta_paging(p)
+
+    render(conn, "index.json", tins: tins, meta: meta)
   end
 
   def create(conn, %{"tin" => tin_params}) do
@@ -22,9 +32,15 @@ defmodule InnWeb.TinController do
 
   def show(conn, %{"id" => id}) do
     tin = Checker.get_tin(id)
+
     case tin do
-      %Tin{} -> conn|> put_status(200)|> render("show.json", %{success: true, tin: tin, msg: "Ok"}) 
-      _ -> conn|> put_status(404)|> render("show.json", %{success: false, tin: tin, msg: "Not Found"})
+      %Tin{} ->
+        conn |> put_status(200) |> render("show.json", %{success: true, tin: tin, msg: "Ok"})
+
+      _ ->
+        conn
+        |> put_status(404)
+        |> render("show.json", %{success: false, tin: tin, msg: "Not Found"})
     end
   end
 

@@ -10,6 +10,8 @@ defmodule Inn.Checker do
 
   alias InnProtocol
 
+  use Paginator
+
   @doc """
   Returns the list of tins.
 
@@ -21,6 +23,36 @@ defmodule Inn.Checker do
   """
   def list_tins do
     Repo.all(Tin)
+  end
+
+  def list_paging(page) do
+    l = 5
+    o = (page - 1) * l
+
+    query =
+      from(t in Tin,
+        order_by: [desc: t.inserted_at],
+        limit: ^l,
+        offset: ^o
+      )
+
+    Repo.all(query)
+  end
+
+  def meta_paging(page) do
+    l = 5
+    query = from(t in Tin, select: count(t.id))
+    total = Repo.one(query)
+
+    last_page = if rem(total,l)===0, do: total/l, else: div(total,l) + 1
+
+    meta = %{
+      :current_page => page,
+      :first_page => 1,
+      :last_page => last_page,
+      :total => total
+      
+    }
   end
 
   @doc """
