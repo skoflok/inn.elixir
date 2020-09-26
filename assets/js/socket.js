@@ -88,6 +88,12 @@ channel.on("validation", payload => {
   }
 });
 
+channel.on("tin_delete", payload => {
+  if(payload.status==true) {
+    document.getElementById("tin-row-" + payload.data ).remove();
+  }
+});
+
 channel.on("phx_reply", payload => {
   chatLabel.textContent = payload.response.ip;
   if(payload.status && (payload.status === "error")) {

@@ -11,5 +11,14 @@ import "../css/app.scss"
 //
 //     import {Socket} from "phoenix"
 import socket from "./socket"
-//
+
+import tinApi from "./tinApi"
+
+window.tinApi = {
+    ...tinApi
+}
+
+
 import "phoenix_html"
+
+

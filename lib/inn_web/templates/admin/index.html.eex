@@ -1,16 +1,30 @@
 <h2> Админ-панель </h2>
 <section class="row">
+    <label for="chat-input" id="chat-label"></label>
+</section>
+<section class="row">
+    <input id="chat-input" type="hidden" ></input>
+</section>
+<section class="row">
+    <div id="messages" role="log" aria-live="polite">
+    </div>
+</section>
+<section class="row">
     <div id="messages" role="log" aria-live="polite">
     </div>
 </section>
 <section class="row">
     <div id="table" role="archive" aria-live="polite">
+
         <%= for tin <- @tins do %>
-        <p>[<%= tin.inserted_at %>] <%= tin.number %> -- <%= tin.is_valid %>
-            <%= if @logged_user.is_logged_in && @logged_user.user.is_admin == true  do%>
-            (<%= tin.ip %>)
-            <% end %>
-        <p>
+        <section class="row" id="tin-row-<%= tin.id %>">
+            <p>[<%= tin.inserted_at %>] <%= tin.number %> -- <%= tin.is_valid %>
+                <%= if @logged_user.is_logged_in && @logged_user.user.is_admin == true  do%>
+                (<%= tin.ip %>)
+                <% end %>
+            <p>
+        <button type="button" onclick="tinApi.delete(<%= tin.id %>)"> Удалить </button>
+        </section>
         <% end %>
     </div>
 </section>

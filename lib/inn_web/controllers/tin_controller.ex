@@ -3,11 +3,12 @@ defmodule InnWeb.TinController do
 
   alias Inn.Checker
   alias Inn.Checker.Tin
+  alias InnWeb.PublicChannel
 
   action_fallback(InnWeb.FallbackController)
 
   def index(conn, params) do
-    page = Map.get(params, "page", "1") |> String.to_integer()
+    page = Map.get(params, "page", "1") |> String.to_integer(10)
 
     p =
       cond do
@@ -56,6 +57,8 @@ defmodule InnWeb.TinController do
     tin = Checker.get_tin!(id)
 
     with {:ok, %Tin{}} <- Checker.delete_tin(tin) do
+      payload = %{status: true, data: id}
+      InnWeb.Endpoint.broadcast("public:checker", "tin_delete", payload) 
       send_resp(conn, :no_content, "")
     end
   end

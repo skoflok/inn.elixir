@@ -51,6 +51,7 @@ defmodule InnWeb.Router do
       scope "/tins" do
         get("/", TinController, :index)
         get("/:id", TinController, :show)
+        delete("/:id", TinController, :delete)
       end
     end
   end

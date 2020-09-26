@@ -4,7 +4,7 @@ defmodule InnWeb.PageController do
   alias Inn.Checker
 
   def index(conn, params) do
-    page = Map.get(params, "page", "1") |> String.to_integer()
+    page = Map.get(params, "page", "1") |> String.to_integer(10)
 
     p =
       cond do
