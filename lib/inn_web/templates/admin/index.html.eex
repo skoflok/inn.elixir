@@ -1,13 +1,4 @@
-<div>
-:)
-</div>
-
-<section class="row">
-    <label for="chat-input" id="chat-label">Лабел</label>
-</section>
-<section class="row">
-    <input id="chat-input" type="text"></input>
-</section>
+<h2> Админ-панель </h2>
 <section class="row">
     <div id="messages" role="log" aria-live="polite">
     </div>
@@ -15,7 +6,11 @@
 <section class="row">
     <div id="table" role="archive" aria-live="polite">
         <%= for tin <- @tins do %>
-        <p>[<%= tin.inserted_at %>] <%= tin.number %> -- <%= tin.is_valid %><p>
+        <p>[<%= tin.inserted_at %>] <%= tin.number %> -- <%= tin.is_valid %>
+            <%= if @logged_user.is_logged_in && @logged_user.user.is_admin == true  do%>
+            (<%= tin.ip %>)
+            <% end %>
+        <p>
         <% end %>
     </div>
 </section>

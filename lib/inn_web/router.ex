@@ -7,7 +7,21 @@ defmodule InnWeb.Router do
     plug(:fetch_flash)
     plug(:protect_from_forgery)
     plug(:put_secure_browser_headers)
-    plug InnWeb.Plugs.AssignUser
+    plug(InnWeb.Plugs.AssignUser)
+  end
+
+  pipeline :admin_area do
+    plug(:logged_in)
+  end
+
+  def logged_in(conn, _opts) do
+    if conn.assigns.logged_user.is_logged_in == false do
+      conn
+      |> put_flash(:error, "Для доступа в панель, пройдите авторизацию")
+      |> redirect(to: "/sessions/new")
+    else
+      conn
+    end
   end
 
   pipeline :api do
@@ -21,6 +35,12 @@ defmodule InnWeb.Router do
 
     resources("/sessions", SessionController, only: [:new, :create])
     delete("/sessions", SessionController, :delete)
+  end
+
+  scope "/admin", InnWeb do
+    pipe_through [:browser, :admin_area]
+
+    get("/", AdminController, :index)
   end
 
   # Other scopes may use custom stacks.
