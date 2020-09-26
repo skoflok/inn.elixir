@@ -23,7 +23,6 @@ defmodule Inn.Account.User do
     user
     |> cast(attrs, [:email, :name, :password_hash, :is_admin, :is_operator])
     |> validate_required([:email, :name, :password_hash, :is_admin, :is_operator])
-    |> IO.inspect()
   end
 
   defp hash_password(attrs) do

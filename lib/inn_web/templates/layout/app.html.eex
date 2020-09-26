@@ -11,10 +11,15 @@
   <body>
     <header>
       <section class="container">
-
       </section>
     </header>
     <main role="main" class="container">
+        <ul class="nav nav-pills">
+        <%= if @logged_user.is_logged_in do %>
+          <li><%= @logged_user.user.email %></li>
+          <li><%= link "Sign in/out", to: Routes.session_path(@conn, :new) %></li>
+        <% end %>
+    </ul>
       <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
       <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
       <%= @inner_content %>
