@@ -10,16 +10,20 @@
   </head>
   <body>
     <header>
-      <section class="container">
+      <section class="container-menu">
+      <nav role="navigation">
+        <ul>
+          <li><%= link "Войти/Выйти", to: Routes.session_path(@conn, :new) %></li>
+          <li><%= link "Главная", to: Routes.page_path(@conn, :index) %></li>
+        <%= if @logged_user.is_logged_in do %>
+          <li><%= @logged_user.user.email %></li>
+          <li><%= link "Админ-панель", to: Routes.admin_path(@conn, :index) %></li>
+          <li><%= link "Список забаненных", to: Routes.admin_path(@conn, :banned) %></li>
+        <% end %>
+      </nav>
       </section>
     </header>
     <main role="main" class="container">
-        <ul class="nav nav-pills">
-        <%= if @logged_user.is_logged_in do %>
-          <li><%= @logged_user.user.email %></li>
-          <li><%= link "Sign in/out", to: Routes.session_path(@conn, :new) %></li>
-        <% end %>
-    </ul>
       <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
       <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
       <%= @inner_content %>

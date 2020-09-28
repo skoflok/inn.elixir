@@ -3,7 +3,7 @@
 </div>
 
 <section class="row">
-    <label for="chat-input" id="chat-label">Лабел</label>
+    <label for="chat-input" id="chat-label"></label>
 </section>
 <section class="row">
     <input id="chat-input" type="text"></input>

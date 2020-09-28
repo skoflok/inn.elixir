@@ -46,6 +46,6 @@ defmodule InnWeb.BannedController do
 
   def remove(conn, %{"ip" => ip} = params) do
     RedisClient.rem_banned(ip)
-    render(conn, "show.json", banned: %{:ip => ip, :time => nil}, meta: %{})
+    render(conn, "show.json", %{banned: %{:ip => ip, :time => nil}, success: true, msg: "Ok"})
   end
 end

@@ -30,7 +30,7 @@ defmodule InnWeb.SessionController do
         conn
         |> put_flash(:info, "Вы залогинены")
         |> put_resp_cookie("_inn_token", jwt)
-        |> redirect(to: "/sessions/new")
+        |> redirect(to: "/admin")
 
       {:error, _reason, conn} ->
         conn

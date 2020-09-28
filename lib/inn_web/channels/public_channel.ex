@@ -3,27 +3,11 @@ defmodule InnWeb.PublicChannel do
 
   alias Inn.Checker
   alias Inn.Checker.Tin
+  alias Inn.RedisClient
 
   @impl true
   def join("public:checker", payload, socket) do
-    ip = extract_ip(socket)
-
-    if banned?(payload, socket) do
-      {:error,
-       %{
-         reason:
-           "Ваш ip-адрес #{ip} заблокирован. До окончания блокировки #{10}. После окончания блокировки перезагрузите страницу",
-         ip: ip
-       }}
-    else
-      {:ok, socket}
-    end
-
-    # if authorized?(payload) do
-    #   {:ok, socket}
-    # else
-    #   {:error, %{reason: "unauthorized"}}
-    # end
+    {:ok, socket}
   end
 
   # Channels can be used in a request/response fashion
@@ -42,23 +26,37 @@ defmodule InnWeb.PublicChannel do
   end
 
   def handle_in("validation", %{"body" => body}, socket) do
+    RedisClient.rem_outdated_ip()
     number =
       case body do
-        %{"number" => val} -> String.to_integer val
+        %{"number" => val} -> String.to_integer(val)
         _ -> 0
       end
 
     ip = extract_ip(socket)
-    is_valid = Checker.verify_tin_number(number)
 
-    IO.inspect(number, label: "#######")
+    case RedisClient.check_banned(ip) do
+      {true, time } ->
+        push(socket, "validation", %{
+          body: nil,
+          status: false,
+          data: "Ваш ip-адрес заблокирован до #{time} (UTC)",
+          reason: "banned"
+        })
 
-    case Checker.create_tin(%{number: number, ip: ip, is_valid: is_valid}) do
-      {:ok, tin} ->
-        broadcast!(socket, "validation", %{body: body, status: true, data: tin})
+      _ ->
+        is_valid = Checker.verify_tin_number(number)
 
-      {:error, tin} ->
-        broadcast!(socket, "validation", %{body: body, status: false, data: nil})
+        case Checker.create_tin(%{number: number, ip: ip, is_valid: is_valid}) do
+          {:ok, tin} ->
+            logged_user = %{:is_logged_in => false}
+            div = Phoenix.View.render_to_string(InnWeb.PageView, "row.html", tin: tin, logged_user: logged_user , is_admin_page: false)
+            
+            broadcast!(socket, "validation", %{body: body, status: true, data: div})
+
+          {:error, tin} ->
+            broadcast!(socket, "validation", %{body: body, status: false, data: nil})
+        end
     end
 
     {:noreply, socket}

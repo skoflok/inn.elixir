@@ -1,6 +1,7 @@
 <h2> Админ-панель </h2>
+<div hidden="true">
 <section class="row">
-    <label for="chat-input" id="chat-label"></label>
+    <label for="chat-input" id="chat-label">Label</label>
 </section>
 <section class="row">
     <input id="chat-input" type="hidden" ></input>
@@ -13,12 +14,13 @@
     <div id="messages" role="log" aria-live="polite">
     </div>
 </section>
+</div>
 <section class="row">
     <div id="table" role="archive" aria-live="polite">
 
         <%= for banned <- @list do %>
         <section class="row" id="banned-row-<%= banned.ip %>">
-            <p><button type="button" onclick="tinApi.unbanned('<%= banned.ip %>')" class="button button-small"> Разбанить </button>
+            <p><button type="button" onclick="tinApi.unbanByIp('<%= banned.ip %>')" class="button button-small"> Разбанить </button>
                 [<%= banned.ip %>] <%= banned.time %>
             <p>
         </section>

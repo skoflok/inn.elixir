@@ -75,15 +75,15 @@ defmodule Inn.RedisClient do
   end
 
   defp format(list) do
-    list |> Enum.chunk_every(2) |> Enum.map(fn [a, b] -> %{:ip => a, :time => b} end)
+    list |> Enum.chunk_every(2) |> Enum.map(fn [a, b] -> %{:ip => a, :time => from_unix!(String.to_integer(b))} end)
   end
 
   def check_banned(ip) do
     {:ok, score} = Redix.command(:redix, ["ZSCORE", @sets_name, ip])
 
     case score do
-      nil -> false
-      _ -> true
+      nil -> {false, nil}
+      _ -> {true, from_unix!(String.to_integer(score))}
     end
   end
 

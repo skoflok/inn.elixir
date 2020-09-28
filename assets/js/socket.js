@@ -80,25 +80,21 @@ chatInput.addEventListener("keypress", event => {
 
 channel.on("validation", payload => {
   if(payload.status==true) {
-    let messageItem = document.createElement("p");
+    let messageItem = document.createElement("div");
     let date = new Date(payload.data.inserted_at);
     let formattedDate = dateString(date);
-    messageItem.innerText = `[${formattedDate}] ${payload.data.number} -- ${payload.data.is_valid}`;
+
+    messageItem.innerHTML = payload.data;
     messagesContainer.insertBefore(messageItem, messagesContainer.childNodes[0] || null);
+    chatLabel.textContent = ""
+  } else if (payload.status===false && payload.reason=="banned") {
+    chatLabel.textContent = payload.data
   }
 });
 
 channel.on("tin_delete", payload => {
   if(payload.status==true) {
     document.getElementById("tin-row-" + payload.data ).remove();
-  }
-});
-
-channel.on("phx_reply", payload => {
-  chatLabel.textContent = payload.response.ip;
-  if(payload.status && (payload.status === "error")) {
-    chatInput.setAttribute('placeholder', payload.response.reason);
-    chatInput.disabled = true;
   }
 });
 

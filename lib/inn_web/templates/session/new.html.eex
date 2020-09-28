@@ -1,19 +1,39 @@
-<%= form_for @conn, Routes.session_path(@conn, :create), [method: :post], fn f -> %>
-  <div class="form-group">
-    <%= text_input f, :email, placeholder: "Email" %>
-  </div>
+<div hidden="true">
+<section class="row">
+    <label for="chat-input" id="chat-label">Label</label>
+</section>
+<section class="row">
+    <input id="chat-input" type="hidden" ></input>
+</section>
+<section class="row">
+    <div id="messages" role="log" aria-live="polite">
+    </div>
+</section>
+<section class="row">
+    <div id="messages" role="log" aria-live="polite">
+    </div>
+</section>
+</div>
+<%= if @logged_user.is_logged_in==false do %>
+  <%= form_for @conn, Routes.session_path(@conn, :create), [method: :post], fn f -> %>
+    <div class="form-group">
+      <%= text_input f, :email, placeholder: "Email" %>
+    </div>
 
-  <div class="form-group">
-    <%= password_input f, :password, placeholder: "Password" %>
-  </div>
+    <div class="form-group">
+      <%= password_input f, :password, placeholder: "Password" %>
+    </div>
 
-  <div class="form-group">
-    <%= submit "Login" %>
-  </div>
+    <div class="form-group">
+      <%= submit "Войти" %>
+    </div>
+  <% end %>
+<% else %>
+  <h3> Вы залогинены под пользовтелем <%= @logged_user.user.email %> </h3>  
 <% end %>
 
 <%= form_for @conn, Routes.session_path(@conn, :delete), [method: :delete, as: :session], fn _ -> %>
   <div class="form-group">
-    <%= submit "logout" %>
+    <%= submit "Выйти" %>
   </div>
 <% end %>

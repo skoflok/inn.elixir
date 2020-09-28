@@ -45,6 +45,7 @@ export default {
         })
         .then( response => response.json())
         .then( json => {
+            document.getElementById("banned-row-" + ip ).remove();
             console.log(json)
         }).catch(err => {
             console.log(err)

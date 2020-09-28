@@ -1,6 +1,7 @@
 <h2> Админ-панель </h2>
+<div hidden="true">
 <section class="row">
-    <label for="chat-input" id="chat-label"></label>
+    <label for="chat-input" id="chat-label">Label</label>
 </section>
 <section class="row">
     <input id="chat-input" type="hidden" ></input>
@@ -13,6 +14,7 @@
     <div id="messages" role="log" aria-live="polite">
     </div>
 </section>
+</div>
 <section class="row">
     <div id="table" role="archive" aria-live="polite">
 

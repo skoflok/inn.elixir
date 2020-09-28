@@ -142,3 +142,8 @@ hr {
 .text-green {
   color: green;
 }
+
+.container-menu {
+  margin-left: 80%;
+  margin-right: 0;
+}
