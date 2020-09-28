@@ -6,6 +6,20 @@ defmodule InnWeb.FallbackController do
   """
   use InnWeb, :controller
 
+  def call(conn, {:error, :unauthorized}) do
+    conn
+    |> put_status(:unauthorized)
+    |> put_view(InnWeb.ErrorView)
+    |> render("401.json", %{})
+  end
+
+  def call(conn, {:error, :forbidden}) do
+    conn
+    |> put_status(:forbidden)
+    |> put_view(InnWeb.ErrorView)
+    |> render("403.json", %{})
+  end
+
   # This clause handles errors returned by Ecto's insert/update/delete.
   def call(conn, {:error, %Ecto.Changeset{} = changeset}) do
     conn

@@ -47,7 +47,8 @@ defmodule Inn.MixProject do
       {:plug_cowboy, "~> 2.0"},
       {:paginator, "~> 1.0.1"},
       {:bcrypt_elixir, "~> 2.0"},
-      {:guardian, "~> 2.0"}
+      {:guardian, "~> 2.0"},
+      {:redix, ">= 0.0.0"},
     ]
   end
 

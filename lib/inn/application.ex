@@ -14,9 +14,11 @@ defmodule Inn.Application do
       # Start the PubSub system
       {Phoenix.PubSub, name: Inn.PubSub},
       # Start the Endpoint (http/https)
-      InnWeb.Endpoint
+      InnWeb.Endpoint,
       # Start a worker by calling: Inn.Worker.start_link(arg)
-      # {Inn.Worker, arg}
+      # {Inn.Worker, arg},
+
+      {Redix, name: :redix}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

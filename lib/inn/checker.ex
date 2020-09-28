@@ -10,8 +10,6 @@ defmodule Inn.Checker do
 
   alias InnProtocol
 
-  use Paginator
-
   @doc """
   Returns the list of tins.
 

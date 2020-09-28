@@ -15,9 +15,7 @@
 <section class="row">
     <div id="table" role="archive" aria-live="polite">
             <%= for tin <- @tins do %>
-                <section class="row" id="tin-row-<%= tin.id %>">
-                <p>[<%= tin.inserted_at %>] <%= tin.number %> -- <%= tin.is_valid %><p>
-                </section>
+                <%= render(InnWeb.PageView, "row.html", tin: tin, logged_user: @logged_user, is_admin_page: false) %>
             <% end %>
     </div>
 </section>

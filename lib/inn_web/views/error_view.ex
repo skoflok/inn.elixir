@@ -7,6 +7,22 @@ defmodule InnWeb.ErrorView do
   #   "Internal Server Error"
   # end
 
+  def render("401.json", _assigns) do
+    %{
+      success: false,
+      data: nil,
+      msg: "Unauthorized",
+    }
+  end
+
+  def render("403.json", _assigns) do
+    %{
+      success: false,
+      data: nil,
+      msg: "Access Denied",
+    }
+  end
+  
   # By default, Phoenix returns the status message from
   # the template name. For example, "404.html" becomes
   # "Not Found".

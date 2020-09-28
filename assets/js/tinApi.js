@@ -17,5 +17,37 @@ export default {
 
     test: function() {
         fetch('/admin').then( response => console.log(response))
+    },
+
+    banByTin: function(id) {
+        let time = parseInt(document.querySelector("#tin-row-bantime-" + id).value,10);
+        let data = {time: time};
+        fetch('/api/v1/banned/' + id,{
+            method: 'POST',
+            headers: {
+            },
+            body: JSON.stringify(data)
+        })
+        .then( response => response.json())
+        .then( json => {
+            alert("Успешно");
+            console.log(json);
+        }).catch(err => {
+            console.log(err)
+        });
+    },
+
+    unbanByIp: function(ip) {
+        fetch('/api/v1/banned/' + ip,{
+            method: 'DELETE',
+            headers: {
+            }
+        })
+        .then( response => response.json())
+        .then( json => {
+            console.log(json)
+        }).catch(err => {
+            console.log(err)
+        });
     }
 }

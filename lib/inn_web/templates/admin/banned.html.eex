@@ -16,8 +16,12 @@
 <section class="row">
     <div id="table" role="archive" aria-live="polite">
 
-        <%= for tin <- @tins do %>
-            <%= render(InnWeb.PageView, "row.html", tin: tin, logged_user: @logged_user, is_admin_page: true) %>
+        <%= for banned <- @list do %>
+        <section class="row" id="banned-row-<%= banned.ip %>">
+            <p><button type="button" onclick="tinApi.unbanned('<%= banned.ip %>')" class="button button-small"> Разбанить </button>
+                [<%= banned.ip %>] <%= banned.time %>
+            <p>
+        </section>
         <% end %>
     </div>
 </section>

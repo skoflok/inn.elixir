@@ -51,4 +51,6 @@ defmodule InnWeb.Endpoint do
   plug Plug.Head
   plug Plug.Session, @session_options
   plug InnWeb.Router
+
+  plug InnWeb.Plugs.BanTimer
 end

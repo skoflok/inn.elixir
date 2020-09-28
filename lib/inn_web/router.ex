@@ -10,8 +10,8 @@ defmodule InnWeb.Router do
     plug(InnWeb.Plugs.AssignUser)
   end
 
-  pipeline :admin_area do
-    plug(:logged_in)
+  pipeline :admin_panel do
+    plug(InnWeb.Plugs.AdminPanel, %{:is_admin => true, :is_operator => true})
   end
 
   def logged_in(conn, _opts) do
@@ -19,12 +19,14 @@ defmodule InnWeb.Router do
       conn
       |> put_flash(:error, "Для доступа в панель, пройдите авторизацию")
       |> redirect(to: "/sessions/new")
+      |> halt()
     else
       conn
     end
   end
 
   pipeline :api do
+    plug(InnWeb.Plugs.AssignUser)
     plug(:accepts, ["json"])
   end
 
@@ -38,9 +40,10 @@ defmodule InnWeb.Router do
   end
 
   scope "/admin", InnWeb do
-    pipe_through [:browser, :admin_area]
+    pipe_through([:browser, :admin_panel])
 
     get("/", AdminController, :index)
+    get("/banned", AdminController, :banned)
   end
 
   # Other scopes may use custom stacks.
@@ -52,6 +55,12 @@ defmodule InnWeb.Router do
         get("/", TinController, :index)
         get("/:id", TinController, :show)
         delete("/:id", TinController, :delete)
+      end
+
+      scope "/banned" do
+        get("/", BannedController, :index)
+        post("/:id", BannedController, :ban)
+        delete("/:ip", BannedController, :remove)
       end
     end
   end
