@@ -1,4 +1,4 @@
-<h2> Админ-панель </h2>
+<h2> Список забаненных </h2>
 <div hidden="true">
 <section class="row">
     <label for="chat-input" id="chat-label">Label</label>

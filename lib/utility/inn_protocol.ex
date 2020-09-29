@@ -15,18 +15,18 @@ defimpl InnProtocol, for: Integer do
       10 ->
         cs = control_sum(d, coefficients[:c10])
         cn = control_number(cs)
-        diff = (cs - cn) |> IO.inspect(label: "diffrent")
+        diff = (cs - cn)
         control_diff(diff, Enum.at(d, 9))
 
       12 ->
         cs11 = control_sum(d, coefficients[:c11])
         cn11 = control_number(cs11)
-        diff11 = (cs11 - cn11) |> IO.inspect(label: "diffrent")
+        diff11 = (cs11 - cn11)
         cd11 = control_diff(diff11, Enum.at(d, 10))
 
         cs12 = control_sum(d, coefficients[:c12])
         cn12 = control_number(cs12)
-        diff12 = (cs12 - cn12) |> IO.inspect(label: "diffrent")
+        diff12 = (cs12 - cn12)
         cd12 = control_diff(diff12, Enum.at(d, 11))
 
         cd11 && cd12
@@ -38,14 +38,12 @@ defimpl InnProtocol, for: Integer do
   defp control_sum(digits, coefficient) do
     digits
     |> Enum.zip(coefficient)
-    |> IO.inspect(label: "control_sum zip")
     |> Enum.map(fn {k, v} -> k * v end)
-    |> IO.inspect(label: "control_sum map")
     |> Enum.reduce(0, fn x, amount -> x + amount end)
   end
 
   defp control_number(sum) do
-    (div(sum, 11) * 11) |> IO.inspect(label: "control_number")
+    (div(sum, 11) * 11)
   end
 
   defp control_diff(10, control) do

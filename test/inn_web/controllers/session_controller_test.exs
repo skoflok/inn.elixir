@@ -1,88 +1,15 @@
 defmodule InnWeb.SessionControllerTest do
   use InnWeb.ConnCase
 
-  alias Inn.Example
+  # @admin_jwt "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJpbm4iLCJleHAiOjE2MDM3MDUxMTcsImlhdCI6MTYwMTI4NTkxNywiaXNzIjoiaW5uIiwianRpIjoiNDVlOGI5Y2EtYWIxNy00MjM1LWJkYTEtZmQ1NzY4NWJmMzc0IiwibmJmIjoxNjAxMjg1OTE2LCJzdWIiOiIxIiwidHlwIjoiYWNjZXNzIn0.gD-QDIRmZA1l4yzJAgF1uUbcdeV3jFEuesx51oNzPKDpfSWolyAscsZxzihb4TD2wnrsXRizv7_W6kvLqnv9Ww"
+  # @operator_jwt "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJpbm4iLCJleHAiOjE2MDM3MDUxNTcsImlhdCI6MTYwMTI4NTk1NywiaXNzIjoiaW5uIiwianRpIjoiYTY1NGZiMjgtODk2YS00ZmVhLThmMTctMjVmNzBlYjY0YmU0IiwibmJmIjoxNjAxMjg1OTU2LCJzdWIiOiIyIiwidHlwIjoiYWNjZXNzIn0.o6avnvJLdMboK7Bym3WnV5yqxCMXO8vGduZdhVrxyKjgetnAMG40p0TvxubjAWDlVlYoqUpBqd2vH04q5Dz75g"
+  # @guest_jwt "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJpbm4iLCJleHAiOjE2MDM3MDUyMDgsImlhdCI6MTYwMTI4NjAwOCwiaXNzIjoiaW5uIiwianRpIjoiOTM0NjdjMzAtNGQ2MC00NmQ0LWFhMjQtMjk1M2IxYTdiYzY2IiwibmJmIjoxNjAxMjg2MDA3LCJzdWIiOiIzIiwidHlwIjoiYWNjZXNzIn0.fX7IgKrdgvOraFK-4TqzIMagomgFk5DrbYu6aKm7cG3xVkU3PPuNw2WEDi3pCv-10AfRKB8I64TDfd4doV5ncA"
 
-  @create_attrs %{}
-  @update_attrs %{}
-  @invalid_attrs %{}
-
-  def fixture(:session) do
-    {:ok, session} = Example.create_session(@create_attrs)
-    session
-  end
 
   describe "index" do
-    test "lists all sessions", %{conn: conn} do
-      conn = get(conn, Routes.session_path(conn, :index))
-      assert html_response(conn, 200) =~ "Listing Sessions"
+    test "GET /sessions/new", %{conn: conn} do
+      conn = get(conn, "/sessions/new")
+      assert html_response(conn, 200) =~ "Авторизация"
     end
-  end
-
-  describe "new session" do
-    test "renders form", %{conn: conn} do
-      conn = get(conn, Routes.session_path(conn, :new))
-      assert html_response(conn, 200) =~ "New Session"
-    end
-  end
-
-  describe "create session" do
-    test "redirects to show when data is valid", %{conn: conn} do
-      conn = post(conn, Routes.session_path(conn, :create), session: @create_attrs)
-
-      assert %{id: id} = redirected_params(conn)
-      assert redirected_to(conn) == Routes.session_path(conn, :show, id)
-
-      conn = get(conn, Routes.session_path(conn, :show, id))
-      assert html_response(conn, 200) =~ "Show Session"
-    end
-
-    test "renders errors when data is invalid", %{conn: conn} do
-      conn = post(conn, Routes.session_path(conn, :create), session: @invalid_attrs)
-      assert html_response(conn, 200) =~ "New Session"
-    end
-  end
-
-  describe "edit session" do
-    setup [:create_session]
-
-    test "renders form for editing chosen session", %{conn: conn, session: session} do
-      conn = get(conn, Routes.session_path(conn, :edit, session))
-      assert html_response(conn, 200) =~ "Edit Session"
-    end
-  end
-
-  describe "update session" do
-    setup [:create_session]
-
-    test "redirects when data is valid", %{conn: conn, session: session} do
-      conn = put(conn, Routes.session_path(conn, :update, session), session: @update_attrs)
-      assert redirected_to(conn) == Routes.session_path(conn, :show, session)
-
-      conn = get(conn, Routes.session_path(conn, :show, session))
-      assert html_response(conn, 200)
-    end
-
-    test "renders errors when data is invalid", %{conn: conn, session: session} do
-      conn = put(conn, Routes.session_path(conn, :update, session), session: @invalid_attrs)
-      assert html_response(conn, 200) =~ "Edit Session"
-    end
-  end
-
-  describe "delete session" do
-    setup [:create_session]
-
-    test "deletes chosen session", %{conn: conn, session: session} do
-      conn = delete(conn, Routes.session_path(conn, :delete, session))
-      assert redirected_to(conn) == Routes.session_path(conn, :index)
-      assert_error_sent 404, fn ->
-        get(conn, Routes.session_path(conn, :show, session))
-      end
-    end
-  end
-
-  defp create_session(_) do
-    session = fixture(:session)
-    %{session: session}
   end
 end

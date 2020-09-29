@@ -18,8 +18,7 @@ defmodule InnWeb.AdminController do
         true -> page
       end
 
-    tins = Checker.list_paging(p, 15)
-    meta = Checker.meta_paging(p, 15)
+    %{:meta => meta, :data => tins} = Checker.list_paging(p, 15)
     conn |> render("index.html", tins: tins, meta: meta)
   end
 

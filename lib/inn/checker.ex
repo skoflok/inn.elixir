@@ -32,25 +32,35 @@ defmodule Inn.Checker do
         limit: ^limit,
         offset: ^o
       )
+    total = Repo.one(from(t in Tin, select: count(t.id)))
+    meta = meta_paging(total, page, limit)
 
-    Repo.all(query)
+    %{:data => Repo.all(query), :meta => meta}
   end
 
-  def meta_paging(page, limit \\ 5 ) do
-    query = from(t in Tin, select: count(t.id))
-    total = Repo.one(query)
+  defp meta_paging(0, _page, _limit) do
+    %{
+      :current_page => 1,
+      :next_page => 1,
+      :previous_page => 1,
+      :first_page => 1,
+      :last_page => 1,
+      :total => 0
+    }
+  end
 
-    last_page = if rem(total,limit)===0, do: total/limit, else: div(total,limit) + 1
-    previous_page = if page <= 1 , do: 1, else: page-1
+  defp meta_paging(total, page, limit) do
+    last_page = if rem(total, limit) === 0, do: total / limit, else: div(total, limit) + 1
+    previous_page = if page <= 1, do: 1, else: page - 1
     next_page = if page < last_page, do: page + 1, else: last_page
-    meta = %{
+
+    %{
       :current_page => page,
-      :next_page => next_page, 
+      :next_page => next_page,
       :previous_page => previous_page,
       :first_page => 1,
       :last_page => last_page,
       :total => total
-      
     }
   end
 

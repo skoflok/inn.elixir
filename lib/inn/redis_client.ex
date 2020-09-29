@@ -18,8 +18,8 @@ defmodule Inn.RedisClient do
     base = ["ZRANGE", @sets_name]
     {:ok, total} = Redix.command(:redix, ["ZCOUNT", @sets_name, "-inf", "+inf"])
 
-    offset = ((page - 1) * limit) |> IO.inspect(label: "offset")
-    last = (offset + limit - 1) |> IO.inspect(label: "last")
+    offset = ((page - 1) * limit)
+    last = (offset + limit - 1)
     {:ok, paging} = Redix.command(:redix, base ++ [offset, last, "WITHSCORES"])
 
     formatted = format(paging)

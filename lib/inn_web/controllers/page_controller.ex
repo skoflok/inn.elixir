@@ -12,8 +12,7 @@ defmodule InnWeb.PageController do
         true -> page
       end
 
-    tins = Checker.list_paging(p)
-    meta = Checker.meta_paging(p)
+    %{:meta => meta, :data => tins} = Checker.list_paging(p, 10)
     conn |> render("index.html", tins: tins, meta: meta)
   end
 end

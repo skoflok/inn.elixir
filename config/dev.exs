@@ -3,7 +3,7 @@ use Mix.Config
 # Configure your database
 config :inn, Inn.Repo,
   username: "postgres",
-  password: "root",
+  password: "",
   database: "inn_dev",
   hostname: "0.0.0.0",
   show_sensitive_data_on_connection_error: true,

@@ -11,7 +11,6 @@ defmodule InnWeb.Plugs.ApiPanel do
         |> Phoenix.Controller.render("401.json", %{})
         |> halt()
     else 
-        IO.inspect(perms, label: "Perms")
         user = conn.assigns.logged_user.user
         case user.is_admin && perms.is_admin || user.is_operator && perms.is_operator do
             true -> conn
@@ -22,7 +21,6 @@ defmodule InnWeb.Plugs.ApiPanel do
                 |> Phoenix.Controller.render("403.json", %{})
                 |> halt() 
         end
-        conn
     end
   end
 

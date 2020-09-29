@@ -2,23 +2,53 @@ defmodule InnWeb.TinControllerTest do
   use InnWeb.ConnCase
 
   alias Inn.Checker
-  alias Inn.Checker.Tin
+
+  alias Inn.Guardian
+  alias Inn.Account
+
+  @admin %{
+    name: "admin",
+    email: "admin@example.com",
+    password: "admin",
+    is_admin: true,
+    is_operator: false
+  }
+
+  @operator %{
+    name: "operator",
+    email: "operator@example.com",
+    password: "operator",
+    is_admin: false,
+    is_operator: true
+  }
+
+  @guest %{
+    name: "guest",
+    email: "guest@example.com",
+    password: "guest",
+    is_admin: false,
+    is_operator: false
+  }
 
   @create_attrs %{
     ip: "some ip",
     is_valid: true,
     number: 42
   }
-  @update_attrs %{
-    ip: "some updated ip",
-    is_valid: false,
-    number: 43
-  }
-  @invalid_attrs %{ip: nil, is_valid: nil, number: nil}
 
   def fixture(:tin) do
     {:ok, tin} = Checker.create_tin(@create_attrs)
     tin
+  end
+
+  def jwt_fixture(attrs) do
+    user = Account.create_user!(attrs)
+    Guardian.encode_and_sign(user)
+  end
+
+  defp set_cookie(conn, user) do
+    {_status, jwt, _claims} = jwt_fixture(user)
+    conn |> put_req_cookie("_inn_token", jwt)
   end
 
   setup %{conn: conn} do
@@ -27,52 +57,18 @@ defmodule InnWeb.TinControllerTest do
 
   describe "index" do
     test "lists all tins", %{conn: conn} do
-      conn = get(conn, Routes.tin_path(conn, :index))
+      conn = conn |> set_cookie(@admin) |> get(Routes.tin_path(conn, :index))
       assert json_response(conn, 200)["data"] == []
     end
-  end
 
-  describe "create tin" do
-    test "renders tin when data is valid", %{conn: conn} do
-      conn = post(conn, Routes.tin_path(conn, :create), tin: @create_attrs)
-      assert %{"id" => id} = json_response(conn, 201)["data"]
-
-      conn = get(conn, Routes.tin_path(conn, :show, id))
-
-      assert %{
-               "id" => id,
-               "ip" => "some ip",
-               "is_valid" => true,
-               "number" => 42
-             } = json_response(conn, 200)["data"]
+    test "lists all tins 401 code", %{conn: conn} do
+      conn = conn |> get(Routes.tin_path(conn, :index))
+      assert json_response(conn, 401)["data"] == nil
     end
 
-    test "renders errors when data is invalid", %{conn: conn} do
-      conn = post(conn, Routes.tin_path(conn, :create), tin: @invalid_attrs)
-      assert json_response(conn, 422)["errors"] != %{}
-    end
-  end
-
-  describe "update tin" do
-    setup [:create_tin]
-
-    test "renders tin when data is valid", %{conn: conn, tin: %Tin{id: id} = tin} do
-      conn = put(conn, Routes.tin_path(conn, :update, tin), tin: @update_attrs)
-      assert %{"id" => ^id} = json_response(conn, 200)["data"]
-
-      conn = get(conn, Routes.tin_path(conn, :show, id))
-
-      assert %{
-               "id" => id,
-               "ip" => "some updated ip",
-               "is_valid" => false,
-               "number" => 43
-             } = json_response(conn, 200)["data"]
-    end
-
-    test "renders errors when data is invalid", %{conn: conn, tin: tin} do
-      conn = put(conn, Routes.tin_path(conn, :update, tin), tin: @invalid_attrs)
-      assert json_response(conn, 422)["errors"] != %{}
+    test "lists all tins 403 code", %{conn: conn} do
+      conn = conn |> set_cookie(@guest) |> get(Routes.tin_path(conn, :index))
+      assert json_response(conn, 403)["data"] == nil
     end
   end
 
@@ -80,12 +76,11 @@ defmodule InnWeb.TinControllerTest do
     setup [:create_tin]
 
     test "deletes chosen tin", %{conn: conn, tin: tin} do
-      conn = delete(conn, Routes.tin_path(conn, :delete, tin))
+      conn = conn |> set_cookie(@operator) |> delete(Routes.tin_path(conn, :delete, tin.id))
       assert response(conn, 204)
 
-      assert_error_sent 404, fn ->
-        get(conn, Routes.tin_path(conn, :show, tin))
-      end
+      conn = conn |> get(Routes.tin_path(conn, :show, tin.id))
+      assert response(conn, 404)
     end
   end
 

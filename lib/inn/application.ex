@@ -6,6 +6,13 @@ defmodule Inn.Application do
   use Application
 
   def start(_type, _args) do
+    redis_db =
+      case Mix.env() do
+        :dev -> 1
+        :test -> 2
+        _ -> 0
+      end
+
     children = [
       # Start the Ecto repository
       Inn.Repo,
@@ -18,7 +25,7 @@ defmodule Inn.Application do
       # Start a worker by calling: Inn.Worker.start_link(arg)
       # {Inn.Worker, arg},
 
-      {Redix, name: :redix}
+      {Redix, [name: :redix, host: "127.0.0.1", port: 6379, database: redis_db]}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

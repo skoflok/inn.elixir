@@ -10,7 +10,6 @@ defmodule InnWeb.Plugs.AdminPanel do
       |> Phoenix.Controller.redirect(to: "/sessions/new")
       |> halt()
     else
-      IO.inspect(perms, label: "Perms")
       user = conn.assigns.logged_user.user
 
       case (user.is_admin && perms.is_admin) || (user.is_operator && perms.is_operator) do
