@@ -6,7 +6,7 @@
         <a href="?page=<%= @meta.previous_page %>"> <%= @meta.previous_page %> </a>
     <% end %>
         <a href="?page=<%= @meta.current_page %>"> [<%= @meta.current_page %>] </a>
-    <%= if @meta.current_page !== @meta.next_page  do%>
+    <%= if @meta.current_page !== @meta.next_page do %>
         <a href="?page=<%= @meta.next_page %>"> <%= @meta.next_page %> </a>
     <% end %>
     <a href="?page=<%= @meta.next_page%>">&raquo;</a>
