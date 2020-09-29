@@ -1,16 +1,16 @@
 <section class="row" id="tin-row-<%= @tin.id %>" style="border-bottom: 2px solid black">
     <p>
-        <%= if @is_admin_page do%>
+        <%= if @is_admin_page do %>
             <button type="button" onclick="tinApi.delete(<%= @tin.id %>)" class="button button-red button-small"> Удалить </button>
         <% end %>
         <div class="column column-100"> [<%= @tin.inserted_at %>] <%= @tin.number %> 
-            <%= if @tin.is_valid do%>
+            <%= if @tin.is_valid do %>
                 <b class="text-green">корректен</b>
             <%= else %>
                 <b class="text-red">некорректен</b>
             <% end %>
         </div>
-        <%= if @is_admin_page && @logged_user.is_logged_in && @logged_user.user.is_admin == true  do%>
+        <%= if @is_admin_page && @logged_user.is_logged_in && @logged_user.user.is_admin == true  do %>
             <div class="column column-25">
             (<%= @tin.ip %>)
             <button type="button" onclick="tinApi.banByTin('<%= @tin.id %>')" class="button button-black button-small"> Забанить </button>
