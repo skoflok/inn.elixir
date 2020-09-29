@@ -11,7 +11,7 @@ defmodule InnWeb.Endpoint do
   ]
 
   socket "/socket", InnWeb.UserSocket,
-    websocket: [connect_info: [:peer_data, :x_headers]],
+    websocket: [timeout: 45_000, connect_info: [:peer_data, :x_headers]],
     longpoll: false
 
   socket "/live", Phoenix.LiveView.Socket, websocket: [connect_info: [session: @session_options]]

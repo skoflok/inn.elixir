@@ -1,4 +1,4 @@
-<section class="row" id="tin-row-<%= @tin.id %>">
+<section class="row" id="tin-row-<%= @tin.id %>" style="border-bottom: 2px solid black">
     <p>
         <%= if @is_admin_page do%>
             <button type="button" onclick="tinApi.delete(<%= @tin.id %>)" class="button button-red button-small"> Удалить </button>
@@ -19,4 +19,3 @@
         <% end %>
     <p>
 </section>
-<hr>

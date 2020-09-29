@@ -6,11 +6,11 @@ defmodule Inn.Application do
   use Application
 
   def start(_type, _args) do
-    redis_db =
+    redis_link =
       case Mix.env() do
-        :dev -> 1
-        :test -> 2
-        _ -> 0
+        :dev -> "redis://127.0.0.1:6379/1"
+        :test -> "redis://127.0.0.1:6379/2"
+        _ -> System.get_env("REDIS_URL")
       end
 
     children = [
@@ -25,7 +25,8 @@ defmodule Inn.Application do
       # Start a worker by calling: Inn.Worker.start_link(arg)
       # {Inn.Worker, arg},
 
-      {Redix, [name: :redix, host: "127.0.0.1", port: 6379, database: redis_db]}
+      # {Redix, [name: :redix, host: "127.0.0.1", port: 6379, database: redis_db]}
+      {Redix, {redis_link,  [name: :redix]}}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
