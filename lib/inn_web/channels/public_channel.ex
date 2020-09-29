@@ -27,6 +27,7 @@ defmodule InnWeb.PublicChannel do
 
   def handle_in("validation", %{"body" => body}, socket) do
     RedisClient.rem_outdated_ip()
+
     number =
       case body do
         %{"number" => val} -> String.to_integer(val)
@@ -36,7 +37,7 @@ defmodule InnWeb.PublicChannel do
     ip = extract_ip(socket)
 
     case RedisClient.check_banned(ip) do
-      {true, time } ->
+      {true, time} ->
         push(socket, "validation", %{
           body: nil,
           status: false,
@@ -50,8 +51,14 @@ defmodule InnWeb.PublicChannel do
         case Checker.create_tin(%{number: number, ip: ip, is_valid: is_valid}) do
           {:ok, tin} ->
             logged_user = %{:is_logged_in => false}
-            div = Phoenix.View.render_to_string(InnWeb.PageView, "row.html", tin: tin, logged_user: logged_user , is_admin_page: false)
-            
+
+            div =
+              Phoenix.View.render_to_string(InnWeb.PageView, "row.html",
+                tin: tin,
+                logged_user: logged_user,
+                is_admin_page: false
+              )
+
             broadcast!(socket, "validation", %{body: body, status: true, data: div})
 
           {:error, tin} ->
@@ -72,7 +79,33 @@ defmodule InnWeb.PublicChannel do
   end
 
   defp extract_ip(socket) do
-    {a, b, c, d} = socket.assigns.peer_data.address
-    "#{a}.#{b}.#{c}.#{d}"
+    # После деплоя понял, что хероку скрывает ip клиентов. Проксирует и выставляет заголовок x-forwarded-for
+    # https://devcenter.heroku.com/articles/http-routing#heroku-headers
+    # комент боли
+    if(Mix.env() == :prod) do
+      get_proxied_ip_address(socket.assigns)
+    else
+      {a, b, c, d} = socket.assigns.peer_data.address
+      "#{a}.#{b}.#{c}.#{d}"
+    end
+  end
+
+  defp get_proxied_ip_address(%{x_headers: headers_list}) do
+    header = Enum.find(headers_list, fn {key, _val} -> key == "x-forwarded-for" end)
+
+    case header do
+      nil ->
+        "0.0.0.0"
+
+      {_key, value} ->
+        value
+
+      _ ->
+        "0.0.0.0"
+    end
+  end
+
+  defp get_proxied_ip_address(_) do
+    "0.0.0.0"
   end
 end

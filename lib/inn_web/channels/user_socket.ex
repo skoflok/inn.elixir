@@ -17,9 +17,6 @@ defmodule InnWeb.UserSocket do
   # performing token verification on connect.
   @impl true
   def connect(params, socket, connect_info) do
-    IO.inspect(connect_info.peer_data.address, label: "#####")
-    IO.inspect(connect_info.peer_data, label: "peer_data")
-    IO.inspect(connect_info, label: "connect_info")
 
     {:ok, assign(socket, connect_info)}
   end
