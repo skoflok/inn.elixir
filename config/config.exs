@@ -26,15 +26,9 @@ config :logger, :console,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
-guardian_secret =
-      case Mix.env() do
-        :dev -> "Xfp4t9qCCqxoBSbeM5DUXbxhdRkSKkinGPbOTq04w2vvgfYSkLIzbm09a3USrUOa"
-        :test -> "kHIpsSiyIj+xswvZHw7DsaOZGGThDF/v99fysEWHXrSUCn088KSUsRmBxHMRkHYt"
-        _ -> System.get_env("GUARDIAN_SECRET_KEY")
-      end
 config :inn, Inn.Guardian,
        issuer: "inn",
-       secret_key: guardian_secret
+       secret_key: "kHIpsSiyIj+xswvZHw7DsaOZGGThDF/v99fysEWHXrSUCn088KSUsRmBxHMRkHYt"
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
