@@ -2,7 +2,7 @@ defmodule InnWeb.UserSocket do
   use Phoenix.Socket
 
   ## Channels
-  channel "public:*", InnWeb.PublicChannel
+  channel("public:*", InnWeb.PublicChannel)
 
   # Socket params are passed from the client and can
   # be used to verify and authenticate a user. After
@@ -19,6 +19,8 @@ defmodule InnWeb.UserSocket do
   def connect(params, socket, connect_info) do
     IO.inspect(connect_info.peer_data.address, label: "#####")
     IO.inspect(connect_info.peer_data, label: "peer_data")
+    IO.inspect(connect_info, label: "connect_info")
+
     {:ok, assign(socket, connect_info)}
   end
 
