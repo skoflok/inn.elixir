@@ -2,12 +2,12 @@
     <div class="pagination">
     <a href="?page=<%= @meta.first_page%>">&laquo;&laquo;</a>
     <a href="?page=<%= @meta.previous_page%>">&laquo;</a>
-    <%= if @meta.current_page !== @meta.first_page  do%>
-        <a href="?page=<%= @meta.previous_page%>"> <%= @meta.previous_page%> </a>
+    <%= if @meta.current_page !== @meta.first_page do %>
+        <a href="?page=<%= @meta.previous_page %>"> <%= @meta.previous_page %> </a>
     <% end %>
-    <a href="?page=<%= @meta.current_page%>"> [<%= @meta.current_page %>] </a>
+        <a href="?page=<%= @meta.current_page %>"> [<%= @meta.current_page %>] </a>
     <%= if @meta.current_page !== @meta.next_page  do%>
-        <a href="?page=<%= @meta.next_page%>"> <%= @meta.next_page%> </a>
+        <a href="?page=<%= @meta.next_page %>"> <%= @meta.next_page %> </a>
     <% end %>
     <a href="?page=<%= @meta.next_page%>">&raquo;</a>
     <a href="?page=<%= @meta.last_page%>">&raquo;&raquo;</a>
