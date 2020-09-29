@@ -27,7 +27,19 @@ guest
 
 Для авторизации используется кука `_inn_token`, которая является jwt, сформированная через [Guardian](https://github.com/ueberauth/guardian).
 
-Для реализации бана по ip используется [sorted_sets Redis](https://redis.io/commands#sorted_set) и библиотека [Redix](https://hexdocs.pm/redix/readme.html) к эликсиру
+Для реализации бана по ip используется [sorted_sets Redis](https://redis.io/commands#sorted_set) и библиотека [Redix](https://hexdocs.pm/redix/readme.html) к эликсиру.
+
+Тесты в папке test. 
+`mix test`
+
+```shell
+.............................................
+
+Finished in 0.7 seconds
+45 tests, 0 failures
+```
+
+
 
 ## https://rocky-atoll-20786.herokuapp.com 
 
