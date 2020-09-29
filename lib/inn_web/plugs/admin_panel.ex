@@ -22,8 +22,6 @@ defmodule InnWeb.Plugs.AdminPanel do
           |> Phoenix.Controller.redirect(to: "/sessions/new")
           |> halt()
       end
-
-      conn
     end
   end
 end

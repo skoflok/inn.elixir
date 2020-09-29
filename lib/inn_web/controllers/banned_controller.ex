@@ -24,6 +24,7 @@ defmodule InnWeb.BannedController do
 
   def ban(conn, params) do
     {:ok, data, _conn_details} = Plug.Conn.read_body(conn)
+    IO.inspect(data, label: "TEST")
     body = Jason.decode!(data)
     %{"time" => time_s} = body
     %{"id" => id_s} = params

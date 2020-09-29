@@ -4,8 +4,8 @@ defmodule InnWeb.PublicChannelTest do
   setup do
     {:ok, _, socket} =
       InnWeb.UserSocket
-      |> socket("user_id", %{some: :assign})
-      |> subscribe_and_join(InnWeb.PublicChannel, "public:lobby")
+      |> socket("user_id", %{peer_data: %{address: {1,2,3,4}}})
+      |> subscribe_and_join(InnWeb.PublicChannel, "public:checker")
 
     %{socket: socket}
   end
@@ -15,7 +15,7 @@ defmodule InnWeb.PublicChannelTest do
     assert_reply ref, :ok, %{"hello" => "there"}
   end
 
-  test "shout broadcasts to public:lobby", %{socket: socket} do
+  test "shout broadcasts to public:checker", %{socket: socket} do
     push socket, "shout", %{"hello" => "all"}
     assert_broadcast "shout", %{"hello" => "all"}
   end
@@ -23,5 +23,10 @@ defmodule InnWeb.PublicChannelTest do
   test "broadcasts are pushed to the client", %{socket: socket} do
     broadcast_from! socket, "broadcast", %{"some" => "data"}
     assert_push "broadcast", %{"some" => "data"}
+  end
+
+  test "validate message ok" , %{socket: socket} do
+    push socket, "validation", %{"body" => %{"number" => "123213"}}
+    assert_broadcast "validation", _
   end
 end
