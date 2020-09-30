@@ -1,5 +1,9 @@
 use Mix.Config
 
+config :inn, Inn.Guardian,
+       issuer: "inn",
+       secret_key: "kHIpsSiyIj+xswvZHw7DsaOZGGThDF/v99fysEWHXrSUCn088KSUsRmBxHMRkHYt"
+       
 # Configure your database
 config :inn, Inn.Repo,
   username: "postgres",

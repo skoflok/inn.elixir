@@ -17,7 +17,7 @@ defmodule InnWeb.BannedController do
         true -> page
       end
 
-    %{:meta => meta, :data => list} = RedisClient.list_paging(p, 4)
+    %{:meta => meta, :data => list} = RedisClient.list_paging(p, 10)
 
     render(conn, "index.json", list: list, meta: meta)
   end

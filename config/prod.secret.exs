@@ -23,6 +23,15 @@ secret_key_base =
     You can generate one by calling: mix phx.gen.secret
     """
 
+config :inn, Inn.Guardian,
+  issuer: "inn",
+  secret_key:
+    System.get_env("GUARDIAN_SECRET_KEY") ||
+      raise("""
+      environment variable GUARDIAN_SECRET_KEY is missing.
+      You can generate one by calling: mix phx.gen.secret
+      """)
+
 config :inn, InnWeb.Endpoint,
   http: [
     port: String.to_integer(System.get_env("PORT") || "4000"),

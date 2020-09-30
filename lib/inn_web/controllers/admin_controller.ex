@@ -18,7 +18,7 @@ defmodule InnWeb.AdminController do
         true -> page
       end
 
-    %{:meta => meta, :data => tins} = Checker.list_paging(p, 15)
+    %{:meta => meta, :data => tins} = Checker.list_paging(p, 10)
     conn |> render("index.html", tins: tins, meta: meta)
   end
 
@@ -31,7 +31,7 @@ defmodule InnWeb.AdminController do
         true -> page
       end
 
-    %{:meta => meta, :data => list} = RedisClient.list_paging(p, 4)
+    %{:meta => meta, :data => list} = RedisClient.list_paging(p, 10)
 
     conn |> render("banned.html", list: list, meta: meta)
   end
